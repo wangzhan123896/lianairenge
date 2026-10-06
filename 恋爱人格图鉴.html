@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>恋爱人格图鉴 · 测出你的恋爱人格</title>
+<meta name="description" content="16 种恋爱人格，3 分钟测出你的心动底色。不是星座，不是 MBTI，是一套只属于恋爱的性格图谱。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21C7 16.5 2.5 13 2.5 8.7 2.5 5.9 4.6 4 7.2 4c1.9 0 3.6 1 4.8 2.6C13.2 5 14.9 4 16.8 4c2.6 0 4.7 1.9 4.7 4.7 0 4.3-4.5 7.8-9.5 12.3z' fill='%23FF7EB6'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+/* ============ 设计系统 ============ */
+:root{
+  --bg:#0B0918;
+  --bg2:#150F2E;
+  --bg3:#201742;
+  --ink:#F6F1FF;
+  --ink2:#C9BDE8;
+  --ink3:#8E82B8;
+  --rose:#FF7EB6;
+  --rose-soft:#FFB3D0;
+  --violet:#B48CFF;
+  --gold:#F5C98A;
+  --line:rgba(255,255,255,.10);
+  --card:rgba(255,255,255,.05);
+  --serif:'Noto Serif SC','Songti SC',serif;
+  --sans:'Noto Sans SC','PingFang SC',sans-serif;
+  --grad:linear-gradient(120deg,#FFB3D0 0%,#FF7EB6 38%,#B48CFF 72%,#F5C98A 100%);
+  --r-lg:26px; --r-md:18px; --r-sm:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--sans);
+  min-height:100vh;overflow-x:hidden;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:rgba(255,126,182,.35);color:#fff}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+
+/* ============ 背景层 ============ */
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-blob{position:fixed;border-radius:50%;filter:blur(90px);opacity:.5;z-index:0;pointer-events:none}
+.blob-1{width:520px;height:520px;left:-160px;top:-140px;background:radial-gradient(circle,rgba(180,140,255,.55),transparent 65%)}
+.blob-2{width:460px;height:460px;right:-150px;top:28%;background:radial-gradient(circle,rgba(255,126,182,.42),transparent 65%)}
+.blob-3{width:420px;height:420px;left:20%;bottom:-180px;background:radial-gradient(circle,rgba(245,201,138,.22),transparent 65%)}
+@media(max-width:640px){
+  .blob-1{width:300px;height:300px;left:-90px;top:-90px}
+  .blob-2{width:280px;height:280px;right:-90px}
+  .blob-3{width:240px;height:240px;left:8%;bottom:-120px}
+}
+main{position:relative;z-index:1}
+
+/* ============ 视图切换 ============ */
+.view{display:none;min-height:100vh}
+.view.active{display:block;animation:fadeUp .55s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+@media(max-width:560px){.wrap{padding:0 14px}}
+
+/* ============ 通用组件 ============ */
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand{display:flex;align-items:center;gap:10px;justify-content:center;letter-spacing:.22em;font-size:12px;color:var(--ink2);text-transform:uppercase}
+.brand .dot{width:6px;height:6px;border-radius:50%;background:var(--grad)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  border-radius:999px;padding:15px 42px;font-size:16px;font-weight:600;color:#120B1F;
+  background:linear-gradient(120deg,#FFB3D0,#FF7EB6 45%,#B48CFF);position:relative;
+  box-shadow:0 10px 34px rgba(255,126,182,.32),0 2px 10px rgba(180,140,255,.25);
+  transition:transform .22s ease,box-shadow .22s ease;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(255,126,182,.4)}
+.btn:active{transform:translateY(0)}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:11px 24px;
+  font-size:14px;color:var(--ink2);border:1px solid var(--line);transition:all .2s;
+}
+.btn-ghost:hover{color:var(--ink);border-color:rgba(255,126,182,.5);background:rgba(255,126,182,.08)}
+.btn-line{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:11px 24px;font-size:14px;color:var(--ink);border:1px solid rgba(255,126,182,.45);transition:all .2s}
+.btn-line:hover{background:rgba(255,126,182,.12);border-color:var(--rose)}
+.kicker{font-size:12px;letter-spacing:.3em;color:var(--ink3);text-transform:uppercase;text-align:center}
+.ghost-btn-note{text-align:center;font-size:12px;color:var(--ink3);margin-top:18px}
+
+/* ============ 封面 ============ */
+#view-home .wrap{display:flex;flex-direction:column;align-items:center;min-height:100vh;padding-top:72px;padding-bottom:40px;text-align:center}
+.hero-top{margin-bottom:34px}
+.hero-title{
+  font-family:var(--serif);font-weight:900;font-size:clamp(44px,7.4vw,72px);line-height:1.18;
+  letter-spacing:.04em;margin:18px 0 16px;
+}
+.hero-sub{font-size:clamp(15px,2.4vw,18px);color:var(--ink2);max-width:520px;font-weight:300}
+.hero-sub b{color:var(--ink);font-weight:500}
+.hero-pills{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:26px 0 34px}
+.pill{font-size:14px;color:var(--ink2);border:1px solid var(--line);border-radius:999px;padding:7px 16px;background:rgba(255,255,255,.03)}
+.hero-note{margin-top:16px;font-size:13px;color:var(--ink3);letter-spacing:.06em}
+.hero-meta{display:flex;gap:26px;margin-top:30px;color:var(--ink3);font-size:13px;letter-spacing:.08em}
+.hero-meta span b{color:var(--ink2);font-weight:500}
+.atlas-link{margin-top:44px;color:var(--ink3);font-size:13px;transition:color .2s;display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:6px 12px}
+.atlas-link:hover{color:var(--rose-soft)}
+.atlas-link svg{transition:transform .25s}
+.atlas-link:hover svg{transform:translateX(3px)}
+.hero-foot{position:absolute;bottom:26px;font-size:11px;color:rgba(142,130,184,.6);letter-spacing:.12em}
+
+/* ============ 答题页 ============ */
+#view-quiz .wrap{min-height:100vh;display:flex;flex-direction:column;padding-top:26px;padding-bottom:30px}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:8px}
+.quiz-back{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink2);transition:all .2s;flex:none}
+.quiz-back:hover{color:var(--ink);border-color:rgba(255,126,182,.5)}
+.quiz-count{font-size:13px;color:var(--ink3);letter-spacing:.14em;margin-left:auto}
+.quiz-count b{color:var(--ink2);font-weight:600}
+.progress-track{height:4px;border-radius:4px;background:rgba(255,255,255,.09);overflow:hidden;margin:12px 0 30px}
+.progress-bar{height:100%;width:0%;border-radius:4px;background:var(--grad);transition:width .4s ease}
+.quiz-dim{font-family:var(--serif);font-size:15px;letter-spacing:.14em;color:var(--rose-soft);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.quiz-dim::before{content:"";width:18px;height:1px;background:linear-gradient(90deg,transparent,var(--rose));flex:none}
+.quiz-q{font-family:var(--serif);font-weight:700;font-size:clamp(21px,4vw,26px);line-height:1.5;margin-bottom:32px;min-height:3.2em}
+.quiz-opts{display:flex;flex-direction:column;gap:14px}
+.qopt{
+  text-align:left;border:1px solid var(--line);border-radius:var(--r-md);
+  background:var(--card);padding:18px 20px;font-size:16px;line-height:1.6;color:var(--ink);
+  display:flex;align-items:center;gap:14px;transition:all .22s ease;position:relative;overflow:hidden;
+}
+.qopt .idx{width:30px;height:30px;flex:none;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--ink3);transition:all .22s}
+.qopt:hover{border-color:rgba(255,126,182,.55);transform:translateX(4px);background:rgba(255,126,182,.06)}
+.qopt:hover .idx{border-color:var(--rose);color:var(--rose-soft)}
+.qopt.chosen{border-color:var(--rose);background:linear-gradient(120deg,rgba(255,126,182,.16),rgba(180,140,255,.14));transform:translateX(4px)}
+.qopt.chosen .idx{background:var(--grad);border-color:transparent;color:#120B1F}
+.qopt.done{opacity:.35;pointer-events:none}
+.quiz-pos{margin-top:auto;text-align:center;font-size:12px;color:var(--ink3);letter-spacing:.2em;padding-top:26px}
+
+/* ============ 解析页 ============ */
+#view-loading .wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-bottom:60px}
+.orbit{position:relative;width:150px;height:150px;margin-bottom:40px}
+.orbit .ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(255,126,182,.35)}
+.orbit .ring.r2{inset:18px;border-color:rgba(180,140,255,.4);border-style:dashed;animation:spin 9s linear infinite}
+.orbit .ring.r3{inset:34px;border-color:rgba(245,201,138,.35)}
+.orbit .core{position:absolute;left:50%;top:50%;width:34px;height:34px;transform:translate(-50%,-50%);border-radius:50%;background:var(--grad);box-shadow:0 0 34px rgba(255,126,182,.7)}
+.orbit .sat{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--gold);box-shadow:0 0 14px rgba(245,201,138,.8);animation:spin 4.5s linear infinite;transform-origin:75px 75px;top:63px;left:63px}
+.orbit .sat.s2{width:8px;height:8px;background:var(--violet);animation-duration:7s;animation-direction:reverse;transform-origin:75px 75px;top:67px;left:67px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-title{font-family:var(--serif);font-weight:700;font-size:clamp(22px,4.4vw,28px);margin-bottom:20px}
+.loading-line{height:26px;font-size:14px;color:var(--ink2);letter-spacing:.12em;transition:opacity .3s}
+.loading-line.fade{opacity:.25}
+
+/* ============ 结果页 ============ */
+#view-result .wrap{padding-top:48px;padding-bottom:60px;text-align:center}
+.result-head{margin-bottom:10px}
+.result-name{font-family:var(--serif);font-weight:900;font-size:clamp(44px,8vw,66px);line-height:1.2;margin:12px 0 8px;letter-spacing:.02em}
+.result-code{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(255,126,182,.5);border-radius:999px;padding:7px 20px;font-size:14px;letter-spacing:.3em;color:var(--rose-soft);background:rgba(255,126,182,.07)}
+.result-code b{color:var(--ink);letter-spacing:.06em}
+.result-ratio{margin-top:14px;font-size:13px;color:var(--ink2)}
+.result-ratio b{color:var(--gold);font-weight:600}
+.result-quote{font-family:var(--serif);font-style:italic;font-size:clamp(16px,3vw,19px);color:var(--ink2);max-width:520px;margin:22px auto 0;line-height:2}
+.result-tags{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:26px 0}
+.rtag{font-size:13px;border-radius:999px;padding:8px 18px;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--ink)}
+.rtag:nth-child(odd){border-color:rgba(255,126,182,.4);color:var(--rose-soft)}
+.rtag:nth-child(even){border-color:rgba(180,140,255,.4);color:var(--violet)}
+.card{
+  background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.02));
+  border:1px solid var(--line);border-radius:var(--r-lg);padding:30px 28px;margin:18px 0;text-align:left;
+}
+.card h3{font-family:var(--serif);font-size:17px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.card h3 .tag{width:26px;height:26px;border-radius:8px;background:var(--grad);color:#120B1F;display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex:none;font-family:var(--sans)}
+.card p{font-size:15px;color:var(--ink2);line-height:1.95;font-weight:300}
+.card p b{color:var(--ink);font-weight:500}
+.radar-wrap{display:flex;justify-content:center;margin:8px 0 4px}
+.radar-note{text-align:center;font-size:13px;color:var(--ink3);margin-top:8px;letter-spacing:.08em}
+.dim-bars{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px;margin-top:18px}
+.dim-item .dim-label{display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:6px}
+.dim-item .dim-label b{color:var(--ink);font-weight:600}
+.dim-bar{height:6px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden;position:relative}
+.dim-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:var(--grad);transition:width .8s ease}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:560px){.two-col{grid-template-columns:1fr}.dim-bars{grid-template-columns:1fr}}
+.two-col .card{padding:24px 22px}
+.perk-list,.mine-list{list-style:none}
+.perk-list li,.mine-list li{font-size:14px;color:var(--ink2);padding:9px 0 9px 30px;position:relative;line-height:1.7;font-weight:300}
+.perk-list li::before{content:"";position:absolute;left:2px;top:15px;width:14px;height:7px;border-left:2px solid var(--rose);border-bottom:2px solid var(--rose);transform:rotate(-45deg)}
+.mine-list li::before{content:"×";position:absolute;left:4px;top:7px;color:var(--rose);font-size:16px;font-family:var(--sans)}
+.match-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.match-row{grid-template-columns:1fr}}
+.match-card{border:1px solid var(--line);border-radius:var(--r-md);padding:20px;background:rgba(255,255,255,.03);transition:all .22s;text-align:left;cursor:pointer}
+.match-card:hover{border-color:rgba(180,140,255,.55);transform:translateY(-3px)}
+.match-card .mc-name{font-family:var(--serif);font-size:19px;font-weight:700}
+.match-card .mc-code{font-size:12px;letter-spacing:.24em;color:var(--violet);margin:4px 0 10px}
+.match-card .mc-desc{font-size:13px;color:var(--ink2);line-height:1.7;font-weight:300}
+.result-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.share-head{margin:44px 0 4px}
+.share-head .kicker{margin-bottom:6px}
+
+/* ============ 分享卡（可截图/导出） ============ */
+.share-wrap{display:flex;justify-content:center;padding:26px 0 8px}
+#shareCard{
+  width:min(330px,86vw);aspect-ratio:3/4;border-radius:22px;overflow:hidden;
+  background:#140F2E;border:1px solid rgba(255,126,182,.28);
+  position:relative;text-align:left;flex:none;
+}
+.sc-glow{position:absolute;border-radius:50%;pointer-events:none}
+.sc-glow.g1{width:250px;height:250px;right:-80px;top:-80px;background:rgba(255,126,182,.24)}
+.sc-glow.g2{width:230px;height:230px;left:-90px;bottom:-70px;background:rgba(180,140,255,.2)}
+.sc-inner{position:relative;padding:26px 24px;display:flex;flex-direction:column;height:100%}
+.sc-brand{font-size:10px;letter-spacing:.34em;color:var(--ink3);display:flex;align-items:center;gap:8px}
+.sc-brand::before{content:"";width:14px;height:1px;background:var(--rose)}
+.sc-name{font-family:var(--serif);font-weight:900;font-size:40px;line-height:1.15;margin:16px 0 6px;letter-spacing:.02em}
+.sc-code{font-size:12px;letter-spacing:.34em;color:var(--rose-soft);margin-bottom:4px}
+.sc-ratio{font-size:11px;color:var(--ink3);margin-bottom:14px}
+.sc-ratio b{color:var(--gold);font-weight:600}
+.sc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.sc-tags span{font-size:10px;padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.16);color:var(--ink2)}
+.sc-quote{font-family:var(--serif);font-style:italic;font-size:13.5px;line-height:1.9;color:var(--ink2)}
+.sc-radar{display:flex;justify-content:center;margin:10px 0 6px}
+.sc-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid rgba(255,255,255,.09)}
+.sc-foot .sf-txt{font-size:9px;color:var(--ink3);letter-spacing:.18em;line-height:1.7}
+.sc-foot .sf-logo{width:30px;height:30px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;color:#120B1F;font-size:15px;font-family:var(--serif)}
+
+/* ============ 图鉴页 ============ */
+#view-atlas .wrap{padding-top:56px;padding-bottom:60px;text-align:center}
+.atlas-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px;text-align:left}
+@media(max-width:900px){.atlas-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:420px){.atlas-grid{grid-template-columns:repeat(1,1fr)}}
+.atlas-card{
+  border:1px solid var(--line);border-radius:var(--r-md);padding:20px 18px;cursor:pointer;
+  background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.015));
+  transition:all .22s;display:flex;flex-direction:column;gap:8px;
+}
+.atlas-card:hover{border-color:rgba(255,126,182,.5);transform:translateY(-4px)}
+.atlas-card .ac-code{font-size:11px;letter-spacing:.26em;color:var(--ink3)}
+.atlas-card .ac-name{font-family:var(--serif);font-size:21px;font-weight:700;color:var(--ink)}
+.atlas-card .ac-tag{font-size:12.5px;color:var(--ink2);line-height:1.6;font-weight:300}
+.atlas-card .ac-ratio{margin-top:auto;font-size:11px;color:var(--ink3)}
+.atlas-card .ac-ratio b{color:var(--gold);font-weight:600}
+
+/* ============ 弹层 ============ */
+#modal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:20px}
+#modal.open{display:flex;animation:fadeUp .3s ease both}
+#modal .mask{position:absolute;inset:0;background:rgba(5,3,14,.72);backdrop-filter:blur(6px)}
+.modal-card{
+  position:relative;width:min(440px,100%);max-height:86vh;overflow-y:auto;
+  background:linear-gradient(170deg,#1B1240,#120D2A);border:1px solid rgba(255,126,182,.3);
+  border-radius:24px;padding:34px 30px;text-align:center;
+}
+.modal-card .m-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);color:var(--ink2);font-size:14px;display:flex;align-items:center;justify-content:center}
+.modal-card .m-close:hover{border-color:var(--rose);color:var(--ink)}
+.m-name{font-family:var(--serif);font-weight:900;font-size:36px;margin:10px 0 6px}
+.m-code{font-size:12px;letter-spacing:.3em;color:var(--rose-soft)}
+.m-ratio{font-size:12px;color:var(--ink3);margin:10px 0 16px}
+.m-quote{font-family:var(--serif);font-style:italic;color:var(--ink2);line-height:1.9;margin-bottom:18px;font-size:14.5px}
+.m-body{text-align:left;font-size:14px;color:var(--ink2);line-height:2;font-weight:300}
+.m-match{margin-top:18px;text-align:left;font-size:13.5px;color:var(--ink2);line-height:1.9}
+.m-match b{color:var(--rose-soft);font-weight:500}
+.m-actions{display:flex;gap:10px;justify-content:center;margin-top:24px;flex-wrap:wrap}
+
+/* ============ 提示条 ============ */
+#toast{
+  position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(20px);z-index:80;
+  background:rgba(23,17,50,.95);border:1px solid rgba(255,126,182,.4);border-radius:999px;
+  padding:12px 26px;font-size:14px;color:var(--ink);opacity:0;pointer-events:none;
+  transition:all .3s ease;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis;
+  box-shadow:0 10px 34px rgba(0,0,0,.4);
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="bg-blob blob-1"></div>
+<div class="bg-blob blob-2"></div>
+<div class="bg-blob blob-3"></div>
+
+<main>
+  <!-- ===== 视图：封面 ===== -->
+  <section id="view-home" class="view active">
+    <div class="wrap">
+      <div class="brand hero-top"><span class="dot"></span>恋爱人格图鉴 · LOVETYPE ATLAS</div>
+      <h1 class="hero-title grad-text">你是什么<br>恋爱人格？</h1>
+      <p class="hero-sub">不是星座，也不是 MBTI——这是一套<b>只属于恋爱的性格图谱</b>。16 种人格，3 分钟，测出你的心动底色。</p>
+      <div class="hero-pills">
+        <span class="pill">16 道场景题</span>
+        <span class="pill">约 3 分钟</span>
+        <span class="pill">0 心理负担</span>
+      </div>
+      <button class="btn" onclick="go('quiz')">开始测试</button>
+      <div class="hero-note">凭直觉作答 · 答案没有对错</div>
+      <div class="hero-meta">
+        <span><b>4</b> 个恋爱维度</span>
+        <span><b>16</b> 型人格</span>
+        <span><b>1</b> 张专属画像</span>
+      </div>
+      <a class="atlas-link" onclick="go('atlas')">先看看全部 16 型人格
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：答题 ===== -->
+  <section id="view-quiz" class="view">
+    <div class="wrap">
+      <div class="quiz-top">
+        <button class="quiz-back" onclick="prevQuestion()" aria-label="上一题">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5m6-6-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="progress-track" style="flex:1;margin:0 0 0 6px"><div class="progress-bar" id="progressBar"></div></div>
+        <div class="quiz-count">第 <b id="qNum">1</b> / 16 题</div>
+      </div>
+      <div id="quizBody" style="margin-top:34px"></div>
+    </div>
+  </section>
+
+  <!-- ===== 视图：解析 ===== -->
+  <section id="view-loading" class="view">
+    <div class="wrap">
+      <div class="orbit">
+        <div class="ring"></div>
+        <div class="ring r2"></div>
+        <div class="ring r3"></div>
+        <div class="core"></div>
+        <div class="sat"></div>
+        <div class="sat s2"></div>
+      </div>
+      <h2 class="loading-title grad-text">正在解析你的恋爱人格</h2>
+      <div class="loading-line" id="loadingLine">读取心动信号……</div>
+    </div>
+  </section>
+
+  <!-- ===== 视图：结果 ===== -->
+  <section id="view-result" class="view">
+    <div class="wrap">
+      <div class="result-head">
+        <div class="kicker">YOUR LOVE PERSONA</div>
+        <h2 class="result-name grad-text" id="rName">—</h2>
+        <div class="result-code" id="rCode">HALN · <b>炽恋猎手</b></div>
+        <div class="result-ratio" id="rRatio">占恋爱人群约 <b>5%</b> · 罕见的炽烈猎手</div>
+      </div>
+      <p class="result-quote" id="rQuote"></p>
+      <div class="result-tags" id="rTags"></div>
+
+      <div class="card">
+        <h3><span class="tag">维</span>心动四维</h3>
+        <div class="radar-wrap" id="rRadar"></div>
+        <div class="radar-note">四个维度的倾向强度</div>
+        <div class="dim-bars" id="rBars"></div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">书</span>恋爱画像</h3>
+        <p id="rDesc"></p>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <h3><span class="tag">＋</span>和 TA 恋爱有多好</h3>
+          <ul class="perk-list" id="rPerks"></ul>
+        </div>
+        <div class="card">
+          <h3><span class="tag">雷</span>恋爱雷区</h3>
+          <ul class="mine-list" id="rMines"></ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">配</span>最佳恋爱搭档</h3>
+        <div class="match-row" id="rMatch"></div>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn" onclick="restart()">重新测试</button>
+        <button class="btn-line" onclick="showAtlasModal(currentType)">查看人格档案</button>
+      </div>
+
+      <div class="share-head">
+        <div class="kicker">SAVE & SHARE</div>
+        <h3 style="font-family:var(--serif);font-size:22px;margin:10px 0 4px">把这张人格卡分享出去</h3>
+        <p style="font-size:13px;color:var(--ink3)">长按截图 / 一键保存 · 也可以复制文案直接发</p>
+      </div>
+      <div class="share-wrap"><div id="shareCard"></div></div>
+      <div class="result-actions" style="margin-top:6px">
+        <button class="btn-line" onclick="saveShare()">保存人格卡图片</button>
+        <button class="btn-line" onclick="copyShare('xiaohongshu')">复制小红书文案</button>
+        <button class="btn-line" onclick="copyShare('moments')">复制朋友圈文案</button>
+      </div>
+      <div style="text-align:center;margin-top:34px">
+        <a class="atlas-link" onclick="go('atlas')">看看全部 16 型人格
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 视图：图鉴 ===== -->
+  <section id="view-atlas" class="view">
+    <div class="wrap">
+      <div class="kicker">LOVETYPE ATLAS · 16 型人格</div>
+      <h2 style="font-family:var(--serif);font-weight:900;font-size:clamp(30px,5.6vw,44px);margin:12px 0 8px">恋爱人格图鉴</h2>
+      <p style="color:var(--ink2);font-size:14px;font-weight:300">四种底色 × 四种相处方式 = 你的心动模样。点击卡片查看完整档案。</p>
+      <div class="atlas-grid" id="atlasGrid"></div>
+      <div style="margin-top:36px">
+        <button class="btn" onclick="go('quiz')">测测我的恋爱人格</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 弹层 -->
+<div id="modal">
+  <div class="mask" onclick="closeModal()"></div>
+  <div class="modal-card">
+    <button class="m-close" onclick="closeModal()" aria-label="关闭">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="kicker">LOVE PERSONA</div>
+    <div class="m-name grad-text" id="mName"></div>
+    <div class="m-code" id="mCode"></div>
+    <div class="m-ratio" id="mRatio"></div>
+    <p class="m-quote" id="mQuote"></p>
+    <div class="m-body" id="mBody"></div>
+    <div class="m-match" id="mMatch"></div>
+    <div class="m-actions">
+      <button class="btn-line" onclick="copyShare('xiaohongshu')">复制分享文案</button>
+      <button class="btn-ghost" onclick="closeModal()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ================= 数据：维度 ================= */
+var DIMS={
+  H:{a:'炽',b:'冽',name:'心动温度'},
+  A:{a:'攻',b:'守',name:'攻势'},
+  L:{a:'理',b:'感',name:'决策'},
+  N:{a:'近',b:'远',name:'空间'}
+};
+var CODE_MAP={H:{a:'H',b:'C'},A:{a:'A',b:'P'},L:{a:'L',b:'E'},N:{a:'N',b:'F'}};
+var DIM_ORDER=['H','A','L','N'];
+
+/* ================= 数据：题库 ================= */
+var QUESTIONS=[
+  {dim:'A',t:'攻势雷达 · 你推还是等？',q:'遇到心动的人，你的第一步是？',o:['制造偶遇、找话题，主动靠近','暗中观察，等 TA 先注意到我']},
+  {dim:'H',t:'温度探测 · 明火还是暗火？',q:'收到喜欢的人发来的「晚安」，你会？',o:['秒回！再补一句小心机','心里小鹿乱撞，只回一个「嗯」']},
+  {dim:'N',t:'空间测量 · 黏人还是放养？',q:'恋爱中你理想的相处状态？',o:['天天见面、消息秒回，黏在一起最安心','各自独立、偶尔见面，舒服就好']},
+  {dim:'L',t:'决策模式 · 用脑还是用心？',q:'开始一段恋爱之前，你会？',o:['先在心里列个清单，条件逐条核对','心动了就冲，条件是什么能吃吗']},
+  {dim:'H',t:'温度探测 · 明火还是暗火？',q:'恋爱纪念日，你更倾向于？',o:['搞个大阵仗，恨不得全世界都知道','安静准备一份心意，只有两个人懂']},
+  {dim:'A',t:'攻势雷达 · 你推还是等？',q:'想约喜欢的人出门，你会？',o:['直接开口：「周六有空吗，带你去个地方」','疯狂暗示，等 TA 主动接话']},
+  {dim:'L',t:'决策模式 · 用脑还是用心？',q:'吵架的时候，你的第一反应是？',o:['先讲逻辑，把对错掰扯清楚','先照顾情绪，道理等会儿再说']},
+  {dim:'N',t:'空间测量 · 黏人还是放养？',q:'另一半和异性朋友聚餐，你？',o:['想跟着去，或者在家疯狂脑补','完全尊重，玩得开心就行']},
+  {dim:'H',t:'温度探测 · 明火还是暗火？',q:'另一半当众夸你，你会？',o:['大方接住，还要反手秀回去','耳朵悄悄红了，假装没听见']},
+  {dim:'A',t:'攻势雷达 · 你推还是等？',q:'对方三天没联系你，你会？',o:['发个消息探探口风，才不内耗','心里翻江倒海，但绝不先开口']},
+  {dim:'L',t:'决策模式 · 用脑还是用心？',q:'选伴侣最看重什么？',o:['三观、规划、现实里的契合度','心动的感觉、聊天的磁场']},
+  {dim:'N',t:'空间测量 · 黏人还是放养？',q:'恋爱中的你需要个人空间吗？',o:['不太需要，和你在一起就是充电','非常需要，独处是我回血的方式']},
+  {dim:'H',t:'温度探测 · 明火还是暗火？',q:'你的「我爱你」说出口的频率？',o:['每天八百遍，生气也要说','越重要越郑重，一年一次算一次']},
+  {dim:'A',t:'攻势雷达 · 你推还是等？',q:'暧昧期，谁负责推进关系？',o:['当然是我，节奏要握在自己手里','我不敢，怕打扰，也怕被拒绝']},
+  {dim:'L',t:'决策模式 · 用脑还是用心？',q:'发现对方有个你难以接受的点？',o:['理性评估，值不值得继续','爱都爱了，试着接受吧']},
+  {dim:'N',t:'空间测量 · 黏人还是放养？',q:'理想的联系频率是？',o:['从早到晚，芝麻大的事都想分享','有事说事，没事各自精彩']}
+];
+
+/* ================= 数据：16 型人格 ================= */
+var TYPES={
+  HALN:{name:'炽恋猎手',ratio:5,rare:'罕见的炽烈猎手',quote:'喜欢是藏不住的，而我从不打算藏。',
+    tags:['目标感拉满','主动控场','占有欲强者'],
+    desc:'你是恋爱里最让人安心的存在——想要什么清清楚楚，出手干脆利落。你看中的猎物很少失手，因为你在出手前已经算好了每一步。炽热的表达和理性的判断在你身上奇妙共存：你既敢爱，也拎得清。但你心里有个小小的领地意识，越在意，越想要全部的确认。',
+    perks:['想要什么都直说，从不让你猜','出手稳准狠，约会安排得明明白白','认定你之后，全世界都知道你是我的'],
+    mines:['被放鸽子、被敷衍','事情脱离掌控','对方回消息太慢还不解释'],
+    match:['CPEF','HPEN']},
+  HALF:{name:'清醒星探',ratio:7,rare:'人间清醒的稀有玩家',quote:'我燃得很炽热，但我只做自己的光。',
+    tags:['热烈又清醒','边界感王者','人间小清醒'],
+    desc:'你是那种「爱的时候轰轰烈烈，清醒的时候雷打不动」的人。你享受恋爱的浓度，但从不把自我交出去。你主动、热烈、头脑清晰，是人群里自带光源的人。恋爱对你是一场精彩的对手戏，不是互相吞噬的剧情。',
+    perks:['爱得热烈又有分寸','能给 TA 想要的自由','从不让感情耽误正事，反而带 TA 变好'],
+    mines:['被过度依赖','被查岗式关心','失去个人空间'],
+    match:['CAEN','HAEF']},
+  HAEN:{name:'直球甜心',ratio:4,rare:'人间小太阳',quote:'喜欢就说，爱就黏，永远不给遗憾留位置。',
+    tags:['真诚暴击','黏人精','藏不住事'],
+    desc:'你是恋爱里的直球选手和气氛担当。喜欢一个人，全世界都会知道；被你喜欢，全世界都会羡慕。你的爱浓烈、具体、滚烫，开心就笑，想你就要说。你几乎不会让一段关系冷场，因为你本身就是热情本身。不过偶尔也给 TA 一点呼吸空间哦。',
+    perks:['喜欢你说得清清楚楚','情绪价值拉满，从不冷暴力','每天都像热恋第一天'],
+    mines:['已读不回','忽冷忽热','感情突然变淡'],
+    match:['CPLN','HPEN']},
+  HAEF:{name:'自由火花',ratio:6,rare:'自由而炽热的火花',quote:'我燃起一场火，然后邀请你一起看星空。',
+    tags:['热爱自由','敢爱敢放','不黏不腻'],
+    desc:'你是爱情里最有魅力的那类存在——靠近时热烈，离开时洒脱。你享受心动、享受表达，但绝不把自己困进一段关系。你像一场自由的风，爱你是快乐的，被你爱是明亮的。你需要的另一半，是能陪你奔跑的人，不是拽住你衣角的人。',
+    perks:['靠近时热烈，离开时体面','从不拖泥带水，尊重彼此节奏','能陪 TA 疯也能放 TA 飞'],
+    mines:['被束缚、被查岗','被要求报备行程','被定义成某人的附属'],
+    match:['CPLF','HALF']},
+  HPLN:{name:'沉默指挥官',ratio:9,rare:'深情的幕后玩家',quote:'我不说，但我已经把你规划进了未来。',
+    tags:['外冷内热','不动声色','行动派深情'],
+    desc:'你嘴上不怎么说，但爱意全在行动里：记得 TA 随口提过的小事、提前安排好一切、在最需要的时候永远在。你炽热而克制，理性而深情。你的爱像深海，表面平静，底下汹涌。靠近你的人，会被你的可靠深深打动。',
+    perks:['嘴上不说，行动满分','记得 TA 说过的每一件小事','需要的时候永远在'],
+    mines:['心意被忽视','被误解成冷漠','突然被打乱计划'],
+    match:['HPEN','CPEN']},
+  HPLF:{name:'云端守望者',ratio:10,rare:'云端上的温柔',quote:'深情不必声张，我在远处也看得清你。',
+    tags:['高冷温柔','观察型选手','细节控'],
+    desc:'你在感情里像一个坐在云端的人：看得清，想得透，却不轻易降落。你炽热的心藏在克制的行为里，只有真正走进你世界的人才能看见。你理性、独立、有自己的节奏，恋爱对你来说，是两个完整的人同行，不是互相填补。',
+    perks:['温柔且克制，情绪稳定','看问题通透，是 TA 的军师','尊重 TA 的全部节奏'],
+    mines:['被推进太快','被过度解读','被要求时刻回应'],
+    match:['CAEF','CPLF']},
+  HPEN:{name:'等风诗人',ratio:8,rare:'温柔的慢热诗人',quote:'我的温柔慢热，只给值得的人。',
+    tags:['温柔本身','细节满分','陪伴型恋人'],
+    desc:'你是恋爱里最温柔的那杯温水。你不急不躁，用自己的节奏慢慢靠近，却总能在细节里让人沦陷。你记得 TA 的喜好，懂得 TA 的情绪，是那种「相处越久越离不开」的恋人。慢热不是高冷，是你对感情的郑重。',
+    perks:['温柔到骨子里，细节满分','慢热但专一，认定就不放手','是情绪最稳定的港湾'],
+    mines:['忽冷忽热','被辜负真心','被当作备选'],
+    match:['HALN','HAEN']},
+  HPEF:{name:'春日壁花',ratio:11,rare:'低调的浪漫主义者',quote:'爱意不必宣之于口，它在每个春天里发芽。',
+    tags:['低调浪漫','氛围感恋人','后劲很足'],
+    desc:'你是那种「初看不惊艳，久处才上瘾」的恋人。你温柔、安静、不争不抢，把深情藏进日常的缝隙里——一杯热饮、一句记得、一次无声的陪伴。你的爱有耐心，像植物一样慢慢生长，一旦认定，就是很久很久。',
+    perks:['安静的美好，后劲十足','陪伴永远拿得出手','把爱藏进日常的每个细节'],
+    mines:['被忽略','被当作可有可无','被要求高调示爱'],
+    match:['CALN','HPLN']},
+  CALN:{name:'冷面攻略家',ratio:5,rare:'高冷反差型选手',quote:'表面不动声色，心里早已布好局。',
+    tags:['高冷学霸','攻略型选手','外冷内热'],
+    desc:'你是恋爱里最有反差感的存在：一张冷静到让人不敢靠近的脸，背后是步步为营的心动攻略。你不轻易动心，但一旦认定目标，就会用自己的方式一点点靠近。你的理性是铠甲，也是最可靠的承诺——被你选择的人，会被你稳稳地护在计划里。',
+    perks:['认定就认真，忠诚度满分','理性安排一切，靠谱到离谱','冷脸下全是为你破的例'],
+    mines:['情绪不被接住','被猜心思猜错','被轻浮对待'],
+    match:['HPEF','CAEN']},
+  CALF:{name:'高冷军师',ratio:6,rare:'人间清醒军师',quote:'恋爱也可以讲逻辑，而我刚好逻辑满分。',
+    tags:['理性至上','疏离又迷人','恋爱分析师'],
+    desc:'你是恋爱里的「军师型」选手：分析 TA 的喜好、预判关系的走向、永远理性在线。你不喜欢失控，也不容易被冲昏头脑。你的爱是克制的、有分寸的，像一位优雅的棋手。能让你主动的人，一定非常特别。',
+    perks:['情绪极其稳定','给建议一针见血','和你在一起永远清醒在线'],
+    mines:['情绪绑架','无意义的纠缠','被索取过度情绪价值'],
+    match:['HAEF','HPLF']},
+  CAEN:{name:'冰山小恶魔',ratio:4,rare:'限定版温柔',quote:'冷是给世界的，热是只给你的。',
+    tags:['反差萌天花板','限定温柔','傲娇本娇'],
+    desc:'你是最让人上头的存在：对别人冷若冰霜，对喜欢的人却悄悄破例。你傲娇、口是心非，但出手从不含糊——想靠近的人，你会用自己的方式撩到 TA 心尖发颤。你的偏爱极其明显，是那种「全世界都在旁边，我只看着你」的偏爱。',
+    perks:['偏爱极其明显，只对 TA 热','傲娇但行动诚实','撩人于无形，专一得很'],
+    mines:['被忽视','被当作和所有人一样','被当众拆台'],
+    match:['HALF','CALN']},
+  CAEF:{name:'神秘旅人',ratio:5,rare:'迷人而危险的存在',quote:'我路过很多风景，只为和你并肩一程。',
+    tags:['氛围感拉满','若即若离','高级玩家'],
+    desc:'你是恋爱里最勾人的谜题。你不轻易展示全貌，总留一点神秘让人琢磨；你也从不为谁停驻太久，除非那个人让你觉得「值得」。你的感情带着审美的距离感，迷人、危险、又让人欲罢不能。',
+    perks:['神秘感拉满，永远有惊喜','不黏人但存在感极强','见过世面，相处不累'],
+    mines:['被查户口','被要求时刻报备','被逼着交心'],
+    match:['HPLF','HAEF']},
+  CPLN:{name:'结界观察者',ratio:7,rare:'慢热但真诚',quote:'我先看清你的世界，再决定要不要进来。',
+    tags:['慢热严谨','谨慎深情','可靠固执'],
+    desc:'你给自己设了一道结界，外面的人进不来，你也不轻易出去。你观察、分析、确认，然后才允许自己动心。一旦认定了，你的忠诚和深情会超出所有人的预期。你的爱不是一时冲动，是深思熟虑后的郑重选择。',
+    perks:['观察细致，看人极准','一旦认定，忠诚超出预期','给你的承诺都算数'],
+    mines:['被催促','被轻率对待','被否定真心'],
+    match:['HAEN','HPEN']},
+  CPLF:{name:'独行哲学家',ratio:8,rare:'自洽的灵魂伴侣',quote:'一个人我也能很好，两个人是锦上添花。',
+    tags:['情绪稳定','精神独立','清醒自洽'],
+    desc:'你是最自洽的恋人：不依附、不索取、不患得患失。你享受独处，也珍惜陪伴；你不急着恋爱，也不抗拒心动。对你来说，恋爱最好的状态是两个独立的人互相欣赏、互相成就。你需要的不是救赎，是共鸣。',
+    perks:['精神独立，情绪自洽','从不需要你猜心思','尊重 TA，也尊重自己'],
+    mines:['被索取无度','被打乱节奏','被要求随叫随到'],
+    match:['HAEF','CAEF']},
+  CPEN:{name:'慢热小鹿',ratio:4,rare:'纯爱小鹿',quote:'我慢热，但我的心动一旦开始，就没有期限。',
+    tags:['害羞本羞','纯爱战神','暗恋高手'],
+    desc:'你是暗恋届的王者：心里上演八百集连续剧，面上还是一副「我没有在想你」的淡定。你的爱是慢慢升温的，可能很久才被察觉，但一旦开始，就滚烫而持久。你是纯爱战神，相信真心换真心。',
+    perks:['暗恋届王者，真诚到犯规','纯爱战神，心动没有期限','一旦认定，滚烫而持久'],
+    mines:['被揶揄','被当作小孩','真心被敷衍'],
+    match:['HPLN','HALN']},
+  CPEF:{name:'月光诗人',ratio:3,rare:'万分之一诗意',quote:'我不说爱你，但每个夜晚都在想你。',
+    tags:['文艺浪漫','灵魂伴侣','美学恋爱'],
+    desc:'你是天生的浪漫主义诗人，把恋爱过成一首含蓄的诗。你不直说爱，但 TA 会从你的眼神、你的文字、你深夜发来的歌里读懂。你需要大量的独处来酝酿温柔，也因此格外珍惜真正懂你的人。遇见你，是很多人平凡日子里最浪漫的事。',
+    perks:['浪漫到骨子里','灵魂共鸣型恋人','和 TA 相处像读一首诗'],
+    mines:['被逼着直白','独处被打扰','日常琐碎磨掉诗意'],
+    match:['HALN','HAEN']}
+};
+
+/* ================= 状态 ================= */
+var answers=[], qIndex=0, lock=false, currentType=null, modalCode=null;
+
+/* ================= 视图切换 ================= */
+function go(view){show(view);window.scrollTo(0,0);}
+function show(view){
+  document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active')});
+  var el=document.getElementById('view-'+view);
+  if(el){el.classList.add('active')}
+  if(view==='quiz'){renderQuestion()}
+}
+
+/* ================= 答题 ================= */
+function renderQuestion(){
+  var q=QUESTIONS[qIndex];
+  var bar=document.getElementById('progressBar');
+  bar.style.width=((qIndex+1)/QUESTIONS.length*100)+'%';
+  document.getElementById('qNum').textContent=qIndex+1;
+  var hasPrev=qIndex>0;
+  document.querySelector('.quiz-back').style.visibility=hasPrev?'visible':'hidden';
+  var html=
+    '<div class="quiz-dim">'+q.t+'</div>'+
+    '<div class="quiz-q">'+q.q+'</div>'+
+    '<div class="quiz-opts">'+
+      '<button class="qopt'+(answers[qIndex]===0?' chosen':'')+'" onclick="choose(0)"><span class="idx">A</span><span>'+q.o[0]+'</span></button>'+
+      '<button class="qopt'+(answers[qIndex]===1?' chosen':'')+'" onclick="choose(1)"><span class="idx">B</span><span>'+q.o[1]+'</span></button>'+
+    '</div>';
+  document.getElementById('quizBody').innerHTML=html;
+}
+function choose(i){
+  if(lock)return;
+  lock=true;
+  answers[qIndex]=i;
+  var opts=document.querySelectorAll('.qopt');
+  opts.forEach(function(o,idx){if(idx!==i)o.classList.add('done');if(idx===i)o.classList.add('chosen')});
+  setTimeout(function(){
+    lock=false;
+    if(qIndex<QUESTIONS.length-1){qIndex++;renderQuestion()}
+    else{finishQuiz()}
+  },330);
+}
+function prevQuestion(){
+  if(lock)return;
+  if(qIndex>0){qIndex--;renderQuestion()}
+}
+function finishQuiz(){
+  show('loading');
+  var lines=['读取心动信号……','分析表达温度……','计算攻势指数……','生成人格画像……'];
+  var el=document.getElementById('loadingLine');
+  var i=0;
+  var timer=setInterval(function(){
+    i++;
+    if(i>=lines.length){clearInterval(timer);return}
+    el.textContent=lines[i];
+  },560);
+  setTimeout(function(){
+    clearInterval(timer);
+    var r=computeResult();
+    currentType=r.type;
+    renderResult(r);
+    show('result');
+  },2480);
+}
+
+/* ================= 评分 ================= */
+function computeResult(){
+  var sums={H:0,A:0,L:0,N:0};
+  QUESTIONS.forEach(function(q,i){sums[q.dim]+=answers[i]});
+  var code='',pct={},pick={};
+  DIM_ORDER.forEach(function(k){
+    var s=sums[k], useB=s>2;
+    code+=CODE_MAP[k][useB?'b':'a'];
+    pick[k]=useB?'b':'a';
+    pct[k]=Math.round(useB? s/4*100 : (4-s)/4*100);
+  });
+  return {code:code,type:TYPES[code],pct:pct,pick:pick};
+}
+
+/* ================= 结果渲染 ================= */
+function renderResult(r){
+  var t=r.type;
+  document.getElementById('rName').textContent=t.name;
+  document.getElementById('rCode').innerHTML=r.code+' · <b>'+t.name+'</b>';
+  document.getElementById('rRatio').innerHTML='占恋爱人群约 <b>'+t.ratio+'%</b> · '+t.rare;
+  document.getElementById('rQuote').textContent='「'+t.quote+'」';
+  var tags=t.tags.map(function(x){return '<span class="rtag">'+x+'</span>'}).join('');
+  document.getElementById('rTags').innerHTML=tags;
+  document.getElementById('rRadar').innerHTML=radarSVG(r.pct,220,110);
+  document.getElementById('rDesc').innerHTML=t.desc;
+  document.getElementById('rPerks').innerHTML=t.perks.map(function(x){return '<li>'+x+'</li>'}).join('');
+  document.getElementById('rMines').innerHTML=t.mines.map(function(x){return '<li>'+x+'</li>'}).join('');
+  var bars='';
+  DIM_ORDER.forEach(function(k){
+    var d=DIMS[k];
+    var aPct = r.pick[k]==='a'? r.pct[k] : 100-r.pct[k];
+    bars+='<div class="dim-item"><div class="dim-label"><span>'+d.a+' <b>'+aPct+'%</b></span><span><b>'+(100-aPct)+'%</b> '+d.b+'</span></div><div class="dim-bar"><i style="width:'+aPct+'%"></i></div></div>';
+  });
+  document.getElementById('rBars').innerHTML=bars;
+  var mh='';
+  t.match.forEach(function(mc){
+    var m=TYPES[mc];
+    mh+='<div class="match-card" onclick="showAtlasModal(\''+mc+'\')">'+
+      '<div class="mc-name">'+m.name+'</div>'+
+      '<div class="mc-code">'+mc+'</div>'+
+      '<div class="mc-desc">'+m.tags[0]+' · '+m.tags[1]+'</div>'+
+      '</div>';
+  });
+  document.getElementById('rMatch').innerHTML=mh;
+  renderShareCard(r);
+}
+function pctOf(pickKey,r,k){return r.pick[k]==='a'?r.pct[k]:100-r.pct[k]}
+
+/* 雷达图 SVG（纯色填充，保证截图兼容） */
+function radarSVG(p,size,cx){
+  var pad=26, C=cx+pad, cy=C, R=cx*0.8;
+  var ang={H:-90,A:0,L:90,N:180};
+  function pt(deg,rr){var a=deg*Math.PI/180;return [C+rr*Math.cos(a),cy+rr*Math.sin(a)]}
+  var grid='';
+  [25,50,75,100].forEach(function(lv){
+    var pts=DIM_ORDER.map(function(k){return pt(ang[k],R*lv/100)});
+    grid+='<polygon points="'+pts.map(function(p){return p.join(',')}).join(' ')+'" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1"/>';
+  });
+  var axes=DIM_ORDER.map(function(k){var q=pt(ang[k],R);return '<line x1="'+C+'" y1="'+cy+'" x2="'+q[0]+'" y2="'+q[1]+'" stroke="rgba(255,255,255,.10)" stroke-width="1"/>'}).join('');
+  var data=DIM_ORDER.map(function(k){return pt(ang[k],R*p[k]/100)});
+  var poly='<polygon points="'+data.map(function(p){return p.join(',')}).join(' ')+'" fill="rgba(255,126,182,.24)" stroke="#FF7EB6" stroke-width="2" stroke-linejoin="round"/>';
+  var dots=DIM_ORDER.map(function(k){var q=pt(ang[k],R*p[k]/100);return '<circle cx="'+q[0]+'" cy="'+q[1]+'" r="4" fill="#FFB3D0" stroke="#0B0918" stroke-width="1.5"/>'}).join('');
+  var labels=DIM_ORDER.map(function(k){
+    var q=pt(ang[k],R+24);
+    return '<text x="'+q[0]+'" y="'+q[1]+'" text-anchor="middle" font-size="11" fill="#8E82B8" font-family="Noto Sans SC, sans-serif">'+DIMS[k].name+'</text>';
+  }).join('');
+  var vw=(C+pad)*2;
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+vw+' '+vw+'">'+grid+axes+poly+dots+labels+'</svg>';
+}
+
+/* ================= 分享卡 ================= */
+function renderShareCard(r){
+  var t=r.type;
+  var tags=t.tags.map(function(x){return '<span>'+x+'</span>'}).join('');
+  document.getElementById('shareCard').innerHTML=
+    '<div class="sc-glow g1"></div><div class="sc-glow g2"></div>'+
+    '<div class="sc-inner">'+
+      '<div class="sc-brand">恋爱人格图鉴</div>'+
+      '<div class="sc-name">'+t.name+'</div>'+
+      '<div class="sc-code">'+r.code+'</div>'+
+      '<div class="sc-ratio">占恋爱人群约 <b>'+t.ratio+'%</b> · '+t.rare+'</div>'+
+      '<div class="sc-tags">'+tags+'</div>'+
+      '<div class="sc-quote">「'+t.quote+'」</div>'+
+      '<div class="sc-radar">'+radarSVG(r.pct,150,75)+'</div>'+
+      '<div class="sc-foot">'+
+        '<div class="sf-txt">和你最配 · '+TYPES[t.match[0]].name+'<br>LOVETYPE ATLAS · 16 型恋爱人格</div>'+
+        '<div class="sf-logo">恋</div>'+
+      '</div>'+
+    '</div>';
+}
+function saveShare(){
+  if(!currentType)return;
+  var doSave=function(){
+    html2canvas(document.getElementById('shareCard'),{backgroundColor:'#140F2E',scale:3,useCORS:true,logging:false}).then(function(c){
+      var a=document.createElement('a');
+      a.download='我的恋爱人格-'+currentType.name+'.png';
+      a.href=c.toDataURL('image/png');
+      a.click();
+      toast('人格卡已保存，去发动态吧');
+    }).catch(function(){toast('保存失败，请直接截图保存')});
+  };
+  if(window.html2canvas){doSave()}
+  else{
+    var s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+    s.onload=doSave;
+    s.onerror=function(){toast('网络受限，请长按 / 截图保存')};
+    document.head.appendChild(s);
+  }
+}
+function copyShare(kind){
+  var t=currentType;
+  if(modalCode && TYPES[modalCode]){t=TYPES[modalCode];}
+  if(!t)return;
+  var code=Object.keys(TYPES).filter(function(k){return TYPES[k]===t})[0];
+  var text= kind==='xiaohongshu'
+    ? '测出我的恋爱人格了！我是「'+t.name+'」'+code+'，占恋爱人群约 '+t.ratio+'% 的稀有选手。\n3 分钟 16 道题，这套恋爱人格图鉴真的有点准，测完想艾特心里那个人。\n你是什么恋爱人格？评论区等你。'
+    : '我是「'+t.name+'」'+code+'，恋爱人群占比约 '+t.ratio+'%。3 分钟，测出你的恋爱人格。';
+  copyText(text);
+}
+
+/* ================= 图鉴 ================= */
+var ATLAS_ORDER=['HALN','HALF','HAEN','HAEF','HPLN','HPLF','HPEN','HPEF','CALN','CALF','CAEN','CAEF','CPLN','CPLF','CPEN','CPEF'];
+function renderAtlas(){
+  var html=ATLAS_ORDER.map(function(code){
+    var t=TYPES[code];
+    return '<div class="atlas-card" onclick="showAtlasModal(\''+code+'\')">'+
+      '<div class="ac-code">'+code+'</div>'+
+      '<div class="ac-name">'+t.name+'</div>'+
+      '<div class="ac-tag">'+t.tags[0]+' · '+t.tags[1]+'</div>'+
+      '<div class="ac-ratio">人群占比 <b>'+t.ratio+'%</b></div>'+
+      '</div>';
+  }).join('');
+  document.getElementById('atlasGrid').innerHTML=html;
+}
+function showAtlasModal(code){
+  var t=TYPES[code];
+  if(!t)return;
+  modalCode=code;
+  document.getElementById('mName').textContent=t.name;
+  document.getElementById('mCode').textContent=code+' · 恋爱人格档案';
+  document.getElementById('mRatio').innerHTML='占恋爱人群约 <b>'+t.ratio+'%</b> · '+t.rare;
+  document.getElementById('mQuote').textContent='「'+t.quote+'」';
+  document.getElementById('mBody').textContent=t.desc;
+  var mh='最佳搭档：<b>'+t.match.map(function(m){return TYPES[m].name}).join('</b> / <b>')+'</b>';
+  document.getElementById('mMatch').innerHTML=mh;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+
+/* ================= 工具 ================= */
+function restart(){answers=[];qIndex=0;currentType=null;go('quiz');}
+function copyText(text){
+  function fallback(){
+    var ta=document.createElement('textarea');
+    ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');toast('文案已复制')}catch(e){toast('复制失败，请手动复制')}
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){toast('文案已复制，去发动态吧')},fallback);
+  }else{fallback()}
+}
+var toastTimer=null;
+function toast(msg){
+  var el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){el.classList.remove('show')},2000);
+}
+
+/* ================= 星尘背景 ================= */
+(function(){
+  var cvs=document.getElementById('stars'),ctx=cvs.getContext('2d');
+  var W,H,stars=[];
+  function resize(){W=cvs.width=innerWidth;H=cvs.height=innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  var N=Math.min(90,Math.max(36,Math.floor(innerWidth*innerHeight/18000)));
+  for(var i=0;i<N;i++){
+    stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+.3,a:Math.random()*.6+.15,s:Math.random()*.22+.04,tw:Math.random()*Math.PI*2});
+  }
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<stars.length;i++){
+      var st=stars[i];
+      st.y-=st.s;st.x+=Math.sin(st.tw)*.06;st.tw+=.007;
+      if(st.y<-4){st.y=H+4;st.x=Math.random()*W}
+      var a=st.a*(.55+.45*Math.sin(st.tw*1.7));
+      ctx.beginPath();ctx.arc(st.x,st.y,st.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(255,240,255,'+a.toFixed(3)+')';ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+/* ================= 初始化 ================= */
+renderAtlas();
+document.getElementById('modal').addEventListener('click',function(e){if(e.target.id==='modal')closeModal()});
+</script>
+</body>
+</html>
